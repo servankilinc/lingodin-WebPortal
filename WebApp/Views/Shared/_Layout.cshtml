@@ -1,0 +1,120 @@
+﻿@{
+    var activePage = ViewContext.RouteData.Values["Controller"]!.ToString();
+}
+<style>
+    #mySideMenu li:hover:not(.nav-item) {
+        background-color: #eee !important;
+    }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/fontawesome-6.5.2/fontawesome-free-6.5.2-web/css/all.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-select-1.13.14/dist/bootstrap-select.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-light border shadow-sm" style="margin-right:2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                        <i class="fa-solid fa-bars fa-xl text-secondary"></i>
+                    </button>
+                    <a class="navbar-brand pl-5" asp-area="" asp-controller="Home" asp-action="Index">OneDay Portal</a>
+                    @*<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>*@
+                </div>
+                @*<div>
+                    <div id="navbar-collapse" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1 gap-3">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item bg-light border shadow-sm rounded-3 ">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">
+                                    Logout
+                                    <i class="fa-solid fa-arrow-right-from-bracket text-secondary"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>*@
+            </div>
+        </nav>
+    </header>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">OneDayPortal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body"> 
+            <ul id="mySideMenu" class="nav nav-pills flex-column gap-2">
+                <li class="@(activePage == "Home" ? "nav-item" : "rounded-3 shadow-sm")">
+                    <a asp-controller="Home" asp-action="Index" class="nav-link @(activePage == "Home" ? "active" : "link-dark")">
+                        <i class="fa-solid fa-house fa-lg mr-2 @(activePage == "Home" ? "text-light" : "text-dark")"></i>
+                        <span class="ml-2">
+                            Home
+                        </span>
+                    </a>
+                </li>
+                <li class="@(activePage == "Category" ? "nav-item" : "rounded-3 shadow-sm")">
+                    <a asp-controller="Category" asp-action="Index" class="nav-link @(activePage == "Category" ? "active" : "link-dark")">
+                        <i class="fa-solid fa-layer-group fa-lg mr-2 @(activePage == "Category" ? "text-light" : "text-primary")"></i>
+                        <span class="ml-2">
+                            Categories
+                        </span>
+                    </a>
+                </li>
+                <li class="@(activePage == "Word" ? "nav-item" : "rounded-3 shadow-sm")">
+                    <a asp-controller="Word" asp-action="Index" class="nav-link @(activePage == "Word" ? "active" : "link-dark")">
+                        <i class="fa-solid fa-earth-europe fa-lg @(activePage == "Word" ? "text-light" : "text-success")"></i>
+                        <span class="ml-2">
+                            Words
+                        </span>
+                    </a>
+                </li>
+                <li class="@(activePage == "Users" ? "nav-item" : "rounded-3 shadow-sm")">
+                    <a asp-controller="User" asp-action="Index" class="nav-link @(activePage == "Users" ? "active" : "link-dark")">
+                        <i class="fa-solid fa-users fa-lg mr-2 @(activePage == "Users" ? "text-light" : "text-secondary")"></i>
+                        <span class="ml-2">
+                            Users
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @(DateTime.Now.Year) - OneDay - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/fontawesome-6.5.2/fontawesome-free-6.5.2-web/js/all.min.js"></script>
+    <script src="~/lib/bootstrap-select-1.13.14/dist/bootstrap-select.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,74 @@
+﻿@using WebApp.Models.Dtos.CategoryDtos
+@model CategoryResponseDto
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="text-decoration-none">Categories</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update Image</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">@Model!.English </span>
+        <span class="fst-italic text-secondary">Edit Image</span>
+    </div>
+    <div class="col-md-6 ">
+        <img id="imgModalFileUpload" src="@Url.Content(Model.HasImage ? Model.Image : "~/placeholder.png")" class="img-fluid shadow " alt="categor-image">
+    </div>
+    <div class="col-md-6 d-flex flex-column justify-content-between">
+        <form asp-controller="Category" asp-action="UpdateImage" method="post" enctype="multipart/form-data" class="p-3 m-1 border-light rounded-3 shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <input class="form-control" type="hidden" name="categoryId" value="@Model.Id" required>
+            </div>
+            <div class="mb-3">
+                <input onchange="ShowPreViewImgCategoryImgUpdate(event)" class="form-control" type="file" name="file" accept="image/*" required>
+            </div>  
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-save mr-2"></i>
+                Save Image
+            </button>
+        </form>
+        <div class="p-3 m-1 border-light rounded-3 shadow-sm">
+            <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalDeleteCurrentImage">
+                <i class="fa-solid fa-trash mr-2"></i>
+                Delete Image
+            </button>
+        </div>
+    </div>
+</div>
+
+ 
+<div class="modal" id="modalDeleteCurrentImage" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column gap-3 text-center p-4">
+                <i class="fa-solid fa-triangle-exclamation fa-2xl text-warning"></i>
+                <b class="h4 text-secondary">Are You Sure To Delete Image?</b>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-light border shadow-sm" data-bs-dismiss="modal">Cancel</button>
+                <a asp-controller="Category" asp-action="DeleteImage" asp-route-categoryId="@Model.Id" asp-route-url="@Model.Image" class="btn btn-danger shadow-sm">
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        // preview before image loading
+        function ShowPreViewImgCategoryImgUpdate(event) {
+            var output = document.getElementById('imgModalFileUpload');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+    </script>
+}

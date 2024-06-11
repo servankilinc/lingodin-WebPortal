@@ -1,0 +1,44 @@
+﻿@model WebApp.Models.Dtos.WordDtos.WordUpdateDto;
+@{
+    var categorySelectList = ViewBag.CategorySelectList as List<SelectListItem>;
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="text-decoration-none">Categories</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Word" asp-action="List" asp-route-categoryId="@Model!.CategoryId" class="text-decoration-none">Words</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update Word</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">@Model.English </span>
+        <span class="fst-italic text-secondary">Update Word Info</span>
+    </div>
+    <div class="col-12">
+        <form asp-controller="Word" asp-action="Update" method="post" class="needs-validation was-validated">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <input asp-for="Id" type="hidden" class="form-control" required>
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Turkish" class="form-label">Turkish</label>
+                <input asp-for="Turkish" class="form-control" required>
+                <span asp-validation-for="Turkish" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="English" class="form-label">English</label>
+                <input asp-for="English" class="form-control" required>
+                <span asp-validation-for="English" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label>
+                <select asp-for="CategoryId" asp-items="@categorySelectList" class="selectpicker" data-width="100%" data-live-search="true" data-size="10" data-style="btn-outline-secondary" title="Seçiniz" required></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fa-solid fa-save"></i> <span class="ml-2">Update</span></button>
+        </form>
+    </div>
+</div>

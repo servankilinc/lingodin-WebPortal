@@ -1,0 +1,37 @@
+﻿@model WebApp.ViewModels.WordCreateViewModel
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="text-decoration-none">Categories</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Word" asp-action="List" asp-route-categoryId="@Model.Category!.Id" class="text-decoration-none">Word List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add New Word</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">Category (@Model.Category!.English)</span> 
+        <span class="fst-italic text-secondary">Add New Word</span>
+    </div>
+    <div class="col-12">
+        <form asp-controller="Word" asp-action="Create" method="post" class="needs-validation was-validated">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <input asp-for="WordCreateDto!.CategoryId" value="@Model.Category.Id" type="hidden" class="form-control" required>
+                <span asp-validation-for="WordCreateDto!.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="WordCreateDto!.Turkish" class="form-label">Turkish</label>
+                <input asp-for="WordCreateDto!.Turkish" class="form-control" required>
+                <span asp-validation-for="WordCreateDto!.Turkish" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="WordCreateDto!.English" class="form-label">English</label>
+                <input asp-for="WordCreateDto!.English" class="form-control" required>
+                <span asp-validation-for="WordCreateDto!.English" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fa-solid fa-save"></i> <span class="ml-2">Save</span></button>
+        </form>
+    </div>
+</div>

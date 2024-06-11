@@ -1,0 +1,53 @@
+﻿@using WebApp.Models.Dtos.UserDtos;
+@model LoginByEmailDto;
+
+@{
+    Layout = "_LayoutBasic";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height:100vh;">
+    <div class="border shadow-sm bg-light p-4" style="border-radius: 1rem;">
+        <div class="d-flex justify-content-center border-bottom mb-4 pb-2">
+            <h3 class="text-secondary font-weight-bold">Giriş Yap</h3>
+        </div>
+        <form asp-controller="Auth" asp-action="Login" method="post" class="needs-validation was-validated">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email Adresi</label>
+                <input asp-for="Email" type="email" class="form-control" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Parola</label>
+                <div class="d-flex gap-2">
+                    <input asp-for="Password" type="password" min="6" class="form-control" required>
+                    <span id="btnShowPassword" status="false" onclick="ShowHidePassword()" class="btn btn-light border">
+                        <i id="IconShow" class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function ShowHidePassword() {
+            if ($(this).attr("status") == "false") {
+                $("#btnShowPassword").html(`<i id="IconShow" class="fa-solid fa-eye"></i> `)
+                $("#Password").attr("type", "password");
+                $(this).attr("status", "true");
+            }
+            else {
+                $("#btnShowPassword").html(`<i id="IconHide" class="fa-solid fa-eye-slash"></i>`)
+                $(this).attr("class", "fa-solid fa-eye");
+                $("#Password").attr("type", "Text");
+                $(this).attr("status", "false");
+            }
+        };
+    </script>
+}

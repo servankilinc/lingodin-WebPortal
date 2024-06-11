@@ -1,0 +1,35 @@
+﻿@using WebApp.Models.ViewModels;
+@model List<RoleByUserModel>
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index" class="text-decoration-none">Users</a></li> 
+        <li class="breadcrumb-item active" aria-current="page">Edit User Authorization</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">@ViewBag.UserName</span>
+        <span class="fst-italic text-secondary">Edit User Authorization</span>
+    </div> 
+    <div class="col-12">
+        @foreach (var roleByUser in Model)
+        {
+            <a asp-controller="User" asp-action="@(roleByUser.IsUserHave ? "DeleteAuthorization" : "AddAuthorization")" asp-route-roleId="@roleByUser.RoleId" asp-route-userId="@roleByUser.UserId" asp-route-userName="@ViewBag.UserName" id="switch-link-@roleByUser.RoleId" class="form-check form-switch">
+                <input id="flexSwitchCheck-@roleByUser.RoleId" onchange="ChangedAuth('@roleByUser.RoleId')" class="form-check-input" type="checkbox" role="switch" @(roleByUser.IsUserHave ? "checked " : string.Empty)>
+                <label class="form-check-label" for="flexSwitchCheck-@roleByUser.RoleId">@roleByUser.RoleName</label>
+            </a>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function ChangedAuth(role) {
+            setTimeout(() => document.getElementById(`switch-link-${role}`).click(), 500);
+        }
+    </script>
+}

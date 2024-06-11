@@ -1,0 +1,39 @@
+﻿@using WebApp.Models.Dtos.UserDtos
+@model UserCreateDto
+
+ 
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index" class="text-decoration-none">Users</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create New Authorized</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-2">Create New Authorized</span>
+    </div>
+    <div class="col-12">
+        <form asp-controller="User" asp-action="CreateAuthorized" method="post" class="needs-validation was-validated">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label">Full Name</label>
+                <input asp-for="FullName" class="form-control" required>
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email Adress</label>
+                <input asp-for="Email" class="form-control" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</div> 

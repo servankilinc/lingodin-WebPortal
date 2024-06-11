@@ -1,0 +1,91 @@
+﻿@using WebApp.Models.Dtos.WordDtos;
+@model List<WordResponseDto>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="text-decoration-none">Categories</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Words</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">Word List </span>
+    </div>
+    @if (ViewBag.categoryId != Guid.Empty)
+    {
+        <div class="col-12 p-3 mb-2 border-bottom">
+            <a role="button" class="btn btn-success shadow-sm p-3" asp-controller="Word" asp-action="Create" asp-route-categoryId="@ViewBag.CategoryId">
+                <i class="fa-solid fa-file-circle-plus fa-xl"></i>
+                Add New Word
+            </a>
+        </div>
+    }
+    <div class="col-12">  
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th scope="col" class="text-center">Id</th>
+                    <th scope="col" class="text-center">English</th>
+                    <th scope="col" class="text-center">Turkish</th>
+                    <th scope="col" class="text-center">Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model.Any()) {
+                    int index = 1;
+                    @foreach (var word in Model)
+                    {
+                        <tr>
+                            <th class="text-center" style="vertical-align:middle;" scope="row">@index</th>
+                            <td class="text-center" style="vertical-align:middle;">@word.Id</td>
+                            <td class="text-center" style="vertical-align:middle;">@word.English</td>
+                            <td class="text-center" style="vertical-align:middle;">@word.Turkish</td>
+                            <td class="text-center" style="vertical-align:middle;">
+                                <img id="imgModalFileUpload" src="@Url.Content(word.HasImage ? word.Image : "~/placeholder.png")" style="width:120px; height: 120px; object-fit:cover;" alt="categor-image">
+                            </td>
+                            <td class="text-center" style="vertical-align:middle;">
+                                <a asp-controller="Word" asp-action="Update" asp-route-wordId="@word.Id" class="btn btn-warning shadow-sm" title="Update Word Info"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a asp-controller="Word" asp-action="UpdateImage" asp-route-wordId="@word.Id" class="btn btn-secondary shadow-sm" title="Set Word Image"><i class="fa-solid fa-camera"></i></a>
+                                <button onclick="ShowConfirmationToDelete('@word.CategoryId', '@word.Id')" class="btn btn-danger shadow-sm" title="Delete Word"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        index += 1;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<div class="modal" id="modalWordDelete" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column gap-3 text-center p-4">
+                <i class="fa-solid fa-triangle-exclamation fa-2xl text-warning"></i>
+                <b class="h4 text-secondary">Are You Sure To Delete?</b>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-light border shadow-sm" data-bs-dismiss="modal">Cancel</button>
+                <a asp-controller="Word" asp-action="Delete" type="submit" class="btn btn-danger shadow-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const ShowConfirmationToDelete = (categoryId, wordId) => {
+            $("#modalWordDelete").modal("show")
+            var link = $("#modalWordDelete a"); 
+            $(link).attr("href", $(link).attr("href") + `?categoryId=${categoryId}&wordId=${wordId}`);
+        }
+    </script>
+}

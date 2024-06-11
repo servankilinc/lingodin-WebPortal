@@ -1,0 +1,152 @@
+﻿@using WebApp.Models.Dtos.WordDtos;
+@using WebApp.Models.Pagination;
+@using WebApp.ViewModels
+@model WebApp.ViewModels.WordIndexViewModel
+
+@{
+    Paginate<WordResponseDto> Resource = Model.Resource!;
+    WordIndexFilterModel FilterModel = Model.FilterModel!;
+
+    var sortList = (List<SelectListItem>)ViewBag.SortList;
+    var selectedSort = sortList.Where(i => i.Selected).FirstOrDefault();
+
+    var qValue = Context.Request.Query.Where(q => q.Key == "size");
+    string? currentSize = (qValue != null && qValue.Any()) ? qValue.FirstOrDefault().Value : string.Empty;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Words</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-2">Word List </span>
+    </div> 
+    <div class="col-lg-3 d-flex flex-column g-3 p-3 shadow-sm rounded-3 border bg-white"> 
+        <form action="@Model.CreateFormUrl(Context.Request)" method="get">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3 pb-3 border-bottom">
+                <label asp-for="FilterModel!.WordSearch" class="form-label">Search</label>
+                <input asp-for="FilterModel!.WordSearch" class="form-control" placeholder="Search">
+                <span asp-validation-for="FilterModel!.WordSearch" class="text-danger"></span>
+            </div>
+            <div class="mb-3 pb-3 border-bottom">
+                <label asp-for="FilterModel!.CategoryIdList" class="form-label">Categories</label>
+                <select asp-for="FilterModel!.CategoryIdList" asp-items="@ViewBag.CategorySelectList" multiple class="selectpicker" data-width="100%" data-live-search="true" data-size="10" data-style="btn-outline-secondary" title="Seçiniz"></select>
+                <span asp-validation-for="FilterModel!.CategoryIdList" class="text-danger"></span>
+            </div>
+            <div class="mb-3 pb-3 border-bottom"> 
+                @Html.CheckBox("FilterModel.OnlyHasntImage")
+                <label asp-for="FilterModel!.OnlyHasntImage" class="form-label m-0">Show Only Imageless</label>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-success w-100"><i class="fa-solid fa-search"></i></button>
+        </form> 
+    </div>
+    <div class="col-lg-9"> 
+        <div class="dropdown">
+            <a class="btn btn-secondary  btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @((selectedSort != null) ? selectedSort.Text : "Order by")
+                
+            </a>
+            <ul class="dropdown-menu">
+                @foreach (var item in sortList)
+                {
+                    <li><a href="@Model.CreateSortUrl(Context.Request, item.Value)" class="dropdown-item @(item.Selected ? "active" :"")">@item.Text</a></li>
+                }
+            </ul>
+        </div>  
+        <table class="table table-hover p-3 shadow-sm rounded-3 border bg-white my-3">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">Id</th>
+                    <th scope="col" class="text-center">English</th>
+                    <th scope="col" class="text-center">Turkish</th>
+                    <th scope="col" class="text-center">Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Resource.Items.Any())
+                {
+                    foreach (var word in Resource.Items)
+                    {
+                        <tr>
+                            <td class="text-center" style="font-size: 0.8rem;">@word.Id</td>
+                            <td class="text-center">@word.English</td>
+                            <td class="text-center">@word.Turkish</td>
+                            <td class="text-center" style="vertical-align:middle;">
+                                <img id="imgModalFileUpload" src="@Url.Content(word.HasImage ? word.Image : "~/placeholder.png")" style="width:120px; height: 120px; object-fit:cover;" alt="categor-image">
+                            </td>
+                            <td class="text-center" style="vertical-align:middle;">
+                                <a asp-controller="Word" asp-action="Update" asp-route-wordId="@word.Id" class="btn btn-warning shadow-sm" title="Update Word Info"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a asp-controller="Word" asp-action="UpdateImage" asp-route-wordId="@word.Id" class="btn btn-secondary shadow-sm" title="Set Word Image"><i class="fa-solid fa-camera"></i></a>
+                                @* <button onclick="ShowConfirmationToDelete('@word.CategoryId', '@word.Id')" class="btn btn-danger shadow-sm" title="Delete Word"><i class="fa-solid fa-trash"></i></button> *@
+                            </td>
+                        </tr> 
+                    }
+                }
+            </tbody>
+        </table>
+
+
+        <div class="d-flex justify-content-center my-3">
+            <ul class="d-flex gap-3" style="list-style:none;">
+                @{
+                    int MaxIndex = Resource.Pages-1;
+                    int htmlMaxIndex = Resource.Pages;
+                    int CurrentIndex = Resource.Index;
+                    for (var index = 0; index <= MaxIndex; index++)
+                    {
+                        int htmlIndex = index + 1;
+
+                        if (index == CurrentIndex)
+                        {
+                            <li class="page-item"><a href="@Model.CreatePageUrl(Context.Request, index)" class="page-link bg-dark text-light" style="border-radius:0.7rem;">@htmlIndex</a></li>
+                        }
+                        else if (index < CurrentIndex && CurrentIndex - index > 3)
+                        {
+
+                            <li class="page-item"><a href="@Model.CreatePageUrl(Context.Request, 0)" class="page-link text-dark border-0">1</a></li>
+                            <li class="page-item"><span class="page-link text-dark border-0">...</span></li>
+                           
+                            index = CurrentIndex - 2;
+                        }
+                        else if (index > CurrentIndex && index - CurrentIndex > 3)
+                        {
+                            if (index != MaxIndex)
+                            {
+                                <li class="page-item"><span class="page-link text-dark border-0 ">...</span></li>
+                            }
+                            <li class="page-item"><a href="@Model.CreatePageUrl(Context.Request, MaxIndex)" class="page-link text-dark border-0">@htmlMaxIndex</a></li>
+                            break;
+                        }
+                        else
+                        {
+                            <li class="page-item"><a href="@Model.CreatePageUrl(Context.Request, index)" class="page-link text-dark border-0">@htmlIndex</a></li>
+                        }  
+                    }
+                }
+            </ul>
+        </div>
+
+        <div>
+            <label class="text-info d-block mb-1" style="font-size:0.65rem;">Word count per page</label>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" @(currentSize != string.Empty && currentSize == "2" ? "checked" : "")>
+                <label class="btn btn-sm btn-outline-primary px-0" for="btnradio1"><a href="@Model.CreateSizeUrl(Context.Request, 2)" class="text-decoration-none px-3 @(currentSize != string.Empty && currentSize == "2" ? "text-light" : "")">2</a></label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @(currentSize != string.Empty && currentSize == "3" ? "checked" : "")>
+                <label class="btn btn-sm btn-outline-primary px-0" for="btnradio3"> <a href="@Model.CreateSizeUrl(Context.Request, 3)" class="text-decoration-none px-3 @(currentSize != string.Empty && currentSize == "3" ? "text-light" : "")">3</a></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+ 
+ 

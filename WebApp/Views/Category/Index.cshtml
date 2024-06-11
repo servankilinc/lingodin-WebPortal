@@ -1,0 +1,66 @@
+﻿@using WebApp.ViewModels
+@model CategeryIndexViewModel
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb ml-4 mb-5">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Categories</li>
+    </ol>
+</nav>
+
+<div class="row g-3 p-3 border rounded-3 shadow bg-light">
+    <div class="col-12 border-bottom">
+        <span class="fw-bold text-secondary fs-1">Categories </span> 
+    </div>
+    <div class="col-12 p-3 mb-2 border-bottom">
+        <a role="button" class="btn btn-lg btn-outline-primary shadow-sm" asp-controller="Category" asp-action="Create">
+            <i class="fa-solid fa-file-circle-plus fa-xl"></i>
+            Create New Category
+        </a>
+    </div>
+    @if (Model.CategoryList != null)
+    {
+        @foreach (var category in Model.CategoryList!)
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="card ">
+                    <img src="@Url.Content(category.HasImage ? category.Image : "~/placeholder.png")" class="card-img-top" alt="..." style="height:30vh; object-fit:cover; width:100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.English / @category.Turkish</h5>
+                        <a asp-controller="Word" asp-action="List" asp-route-categoryId="@category.Id" class="btn btn-primary shadow-sm" title="Category Words"><i class="fa-solid fa-layer-group"></i></a>
+                        <a asp-controller="Category" asp-action="Update" asp-route-categoryId="@category.Id" class="btn btn-warning shadow-sm" title="Update Category Info"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-controller="Category" asp-action="UpdateImage" asp-route-categoryId="@category.Id" class="btn btn-secondary shadow-sm" title="Set Category Image"><i class="fa-solid fa-camera"></i></a>
+                        <button onclick="ShowConfirmationToDelete('@category.Id')" class="btn btn-danger shadow-sm" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+ 
+
+
+<div class="modal" id="modalDelete" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column gap-3 text-center p-4">
+                <i class="fa-solid fa-triangle-exclamation fa-2xl text-warning"></i>
+                <b class="h4 text-secondary">Are You Sure To Delete?</b>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-light border shadow-sm" data-bs-dismiss="modal">Cancel</button>
+                <a asp-controller="Category" asp-action="Delete" type="submit" class="btn btn-danger shadow-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        const ShowConfirmationToDelete = (categoryId) => {
+            var link = $("#modalDelete a" );
+            $(link).attr("href", $(link).attr("href") + `?categoryId=${categoryId}`);
+            $("#modalDelete").modal("show")
+        }
+    </script>
+}
