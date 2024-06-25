@@ -70,8 +70,10 @@
                     <th scope="col">Full Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Roles</th>
+                    <th scope="col">Is Verified Account</th>
                     @if (User.IsInRole("Admin")){
-                        <th scope="col">Change Roles</th> 
+                        <th scope="col">Change Roles</th>
+                        <th scope="col">Delete User</th>
                     }
                 </tr>
             </thead>
@@ -98,8 +100,16 @@
                             </td>
                             @if (User.IsInRole("Admin"))
                             {
+                                <td class="text-center">
+                                    <a id="verify-checkbox-link-@userDetailDto.Id" asp-controller="User" asp-action="ChangeUserAccountVerifyStatus" asp-route-userId="@userDetailDto.Id" style="width:fit-content !important;" title="Delete User">
+                                        <input onchange="ChangedVerifyStatus('@userDetailDto.Id')" class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @(userDetailDto.IsVerifiedUser ? "checked" : "")>
+                                    </a>
+                                </td>
                                 <td class="text-center">    
                                     <a asp-controller="User" asp-action="EditUserAuthorization" asp-route-userId="@userDetailDto.Id" asp-route-userName="@userDetailDto.FullName" class="btn btn-sm btn-outline-primary shadow-sm" title="Change Roles"><i class="fa-solid fa-address-card"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-controller="User" asp-action="DeleteUser" asp-route-userId="@userDetailDto.Id" class="btn btn-sm btn-outline-Danger shadow-sm" title="Delete User"><i class="fa-solid fa-trash"></i></a>
                                 </td>
                             }
                         </tr>
@@ -163,45 +173,10 @@
 
 
 
- 
- 
-
-@* 
-
-
-@using WebApp.Models.Dtos.UserDtos
-@model List<UserResponseDto>
-
-@if (User.IsInRole("Admin"))
-{
-    <a asp-controller="User" asp-action="CreateAuthorized" class="btn btn-light shadow-sm text-secondary">
-        Create New Authorized <i class="fa-solid fa-plus-circle ml-2" ></i>
-    </a>
-}
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Id</th>
-            <th scope="col">Full Name</th>
-            <th scope="col">Email</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @{
-            int index = 1;
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <th scope="row">@index</th>
-                    <td>@item.Id</td>
-                    <td>@item.FullName</td>
-                    <td>@item.Email</td>
-                </tr>
-                index += 1;
-            }
+@section Scripts {
+    <script>
+        function ChangedVerifyStatus(user) {
+            setTimeout(() => document.getElementById(`verify-checkbox-link-${user}`).click(), 500);
         }
-    </tbody>
-</table> *@
-
+    </script>
+}

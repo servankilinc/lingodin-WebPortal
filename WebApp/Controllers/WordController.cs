@@ -138,12 +138,20 @@ public class WordController : Controller
 
 
     // DELETE 
-    public async Task<IActionResult> Delete(Guid categoryId, Guid wordId)
+    public async Task<IActionResult> DeleteOnCategoryPage(Guid categoryId, Guid wordId)
     {
         var request = new RestRequest("api/Word/Delete", Method.Delete);
         request.AddQueryParameter("wordId", wordId);
         await _client.ExecuteAsync(request); 
         return RedirectToAction("List", "Word", new { categoryId });
+    }
+
+    public async Task<IActionResult> Delete(Guid wordId)
+    {
+        var request = new RestRequest("api/Word/Delete", Method.Delete);
+        request.AddQueryParameter("wordId", wordId);
+        await _client.ExecuteAsync(request); 
+        return RedirectToAction("Index", "Word");
     }
 
 

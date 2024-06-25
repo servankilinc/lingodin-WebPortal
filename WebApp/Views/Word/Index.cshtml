@@ -84,7 +84,7 @@
                             <td class="text-center" style="vertical-align:middle;">
                                 <a asp-controller="Word" asp-action="Update" asp-route-wordId="@word.Id" class="btn btn-warning shadow-sm" title="Update Word Info"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <a asp-controller="Word" asp-action="UpdateImage" asp-route-wordId="@word.Id" class="btn btn-secondary shadow-sm" title="Set Word Image"><i class="fa-solid fa-camera"></i></a>
-                                @* <button onclick="ShowConfirmationToDelete('@word.CategoryId', '@word.Id')" class="btn btn-danger shadow-sm" title="Delete Word"><i class="fa-solid fa-trash"></i></button> *@
+                                <button onclick="ShowConfirmationToDelete('@word.CategoryId', '@word.Id')" class="btn btn-danger shadow-sm" title="Delete Word"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr> 
                     }
@@ -148,5 +148,29 @@
 
 
 
- 
- 
+
+<div class="modal" id="modalWordDelete" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column gap-3 text-center p-4">
+                <i class="fa-solid fa-triangle-exclamation fa-2xl text-warning"></i>
+                <b class="h4 text-secondary">Are You Sure To Delete?</b>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-light border shadow-sm" data-bs-dismiss="modal">Cancel</button>
+                <a asp-controller="Word" asp-action="Delete" type="submit" class="btn btn-danger shadow-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const ShowConfirmationToDelete = ( wordId) => {
+            $("#modalWordDelete").modal("show")
+            var link = $("#modalWordDelete a");
+            $(link).attr("href", $(link).attr("href") + `?wordId=${wordId}`);
+        }
+    </script>
+}

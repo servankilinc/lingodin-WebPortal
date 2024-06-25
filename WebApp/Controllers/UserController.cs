@@ -16,6 +16,7 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
+[Authorize(Roles = "Admin, Authorized")]
 public class UserController : Controller
 {
     private readonly RestClient _client;
@@ -60,6 +61,7 @@ public class UserController : Controller
         return View();
     }
 
+
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAuthorized(UserCreateDto userCreateDto)
@@ -77,12 +79,39 @@ public class UserController : Controller
         var response = await _client.ExecuteAsync(request);
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK) 
-            return RedirectToAction("Index", "Users");
+            return RedirectToAction("Index", "User");
 
         ResponseHelper.HandleResponseError(response, this.ModelState);
         return View(userCreateDto);
     }
 
+
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ChangeUserAccountVerifyStatus(Guid userId)
+    {
+        if (userId == Guid.Empty) throw new ArgumentException("The userId cannot be empty.", nameof(userId));
+
+        var request = new RestRequest("api/Auth/ChangeUserAccountVerifyStatus", Method.Get);
+        request.AddQueryParameter("userId", userId);
+        await _client.GetAsync(request);
+        return RedirectToAction("Index", "User");
+    }
+
+
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        if (userId == Guid.Empty) throw new ArgumentException("The userId cannot be empty.", nameof(userId));
+
+        var request = new RestRequest("api/User/Delete", Method.Delete);
+        request.AddQueryParameter("userId", userId);
+        await _client.ExecuteAsync(request);
+        return RedirectToAction("Index", "User");
+    }
+
+ 
 
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> EditUserAuthorization(Guid userId, string userName)
@@ -98,6 +127,7 @@ public class UserController : Controller
         return View(roleList);
     }
 
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddAuthorization(Guid userId, Guid roleId, string? userName)
     {
@@ -110,6 +140,7 @@ public class UserController : Controller
 
         return RedirectToAction("EditUserAuthorization", "User", new { userId, userName } );
     }
+
 
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteAuthorization(Guid userId, Guid roleId, string? userName)

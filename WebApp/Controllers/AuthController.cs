@@ -54,7 +54,7 @@ public class AuthController : Controller
                 SameSite = SameSiteMode.Strict, // CSRF ataklarını önlemek için
                 Expires = userAuthResponse.AccessToken.Expiration // Token'ın süresi
             });
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Portal");
         }
 
         ResponseHelper.HandleResponseError(response, this.ModelState);

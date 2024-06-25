@@ -1,7 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RestSharp.Authenticators;
 using RestSharp;
@@ -16,8 +15,8 @@ using WebApp.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddControllersWithViews();
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
 builder.Services.AddHttpContextAccessor();
@@ -138,8 +137,13 @@ app.UseRateLimiter();
 
 app.UseSerilogRequestLogging();
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "portal/{controller=Portal}/{action=Index}/{id?}");
 
 app.Run();

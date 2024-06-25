@@ -7,5 +7,6 @@ public class UserDetailResponseDto : IDto
     public Guid Id { get; set; }
     public string? FullName { get; set; }
     public string? Email { get; set; }
+    public bool IsVerifiedUser { get; set; }
     public List<RoleResponseDto>? Roles { get; set; }
 }

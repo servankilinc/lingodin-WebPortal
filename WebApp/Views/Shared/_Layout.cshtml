@@ -27,7 +27,7 @@
                     <button class="btn btn-light border shadow-sm" style="margin-right:2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <i class="fa-solid fa-bars fa-xl text-secondary"></i>
                     </button>
-                    <a class="navbar-brand pl-5" asp-area="" asp-controller="Home" asp-action="Index">OneDay Portal</a>
+                    <a class="navbar-brand pl-5" asp-area="" asp-controller="Portal" asp-action="Index">OneDay Portal</a>
                     @*<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -63,7 +63,7 @@
         <div class="offcanvas-body"> 
             <ul id="mySideMenu" class="nav nav-pills flex-column gap-2">
                 <li class="@(activePage == "Home" ? "nav-item" : "rounded-3 shadow-sm")">
-                    <a asp-controller="Home" asp-action="Index" class="nav-link @(activePage == "Home" ? "active" : "link-dark")">
+                    <a asp-controller="Portal" asp-action="Index" class="nav-link @(activePage == "Home" ? "active" : "link-dark")">
                         <i class="fa-solid fa-house fa-lg mr-2 @(activePage == "Home" ? "text-light" : "text-dark")"></i>
                         <span class="ml-2">
                             Home
