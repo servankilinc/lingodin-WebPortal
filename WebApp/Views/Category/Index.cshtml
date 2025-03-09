@@ -23,7 +23,7 @@
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <div class="card ">
-                    <img src="@Url.Content(category.HasImage ? category.Image : "~/placeholder.png")" class="card-img-top" alt="..." style="height:30vh; object-fit:cover; width:100%;">
+                    <img src="@Url.Content(category.HasImage ? (GlobalStates.ApiBaseUrl + category.Image) : "~/placeholder.png")" class="card-img-top" alt="..." style="height:30vh; object-fit:cover; width:100%;">
                     <div class="card-body">
                         <h5 class="card-title">@category.English / @category.Turkish</h5>
                         <a asp-controller="Word" asp-action="List" asp-route-categoryId="@category.Id" class="btn btn-primary shadow-sm" title="Category Words"><i class="fa-solid fa-layer-group"></i></a>

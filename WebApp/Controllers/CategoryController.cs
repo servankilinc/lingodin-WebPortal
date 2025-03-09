@@ -54,7 +54,7 @@ public class CategoryController : Controller
             validationResult.AddToModelState(this.ModelState);
             return View(categoryCreateDto);
         }
-         
+        
         var request = new RestRequest("api/Category/Insert", Method.Post);
         request.AddJsonBody(categoryCreateDto);
         var response = await _client.ExecuteAsync<CategoryResponseDto>(request);

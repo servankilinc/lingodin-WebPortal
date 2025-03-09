@@ -15,7 +15,7 @@
         <span class="fst-italic text-secondary">Edit Image</span>
     </div>
     <div class="col-md-6 ">
-        <img id="imgModalFileUpload" src="@Url.Content(Model.HasImage ? Model.Image : "~/placeholder.png")" class="img-fluid shadow " alt="categor-image">
+        <img id="imgModalFileUpload" src="@Url.Content(Model.HasImage ? (GlobalStates.ApiBaseUrl + Model.Image) : "~/placeholder.png")" class="img-fluid shadow " alt="categor-image">
     </div>
     <div class="col-md-6 d-flex flex-column justify-content-between">
         <form asp-controller="Category" asp-action="UpdateImage" method="post" enctype="multipart/form-data" class="p-3 m-1 border-light rounded-3 shadow-sm">

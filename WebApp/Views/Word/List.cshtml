@@ -45,7 +45,7 @@
                             <td class="text-center" style="vertical-align:middle;">@word.English</td>
                             <td class="text-center" style="vertical-align:middle;">@word.Turkish</td>
                             <td class="text-center" style="vertical-align:middle;">
-                                <img id="imgModalFileUpload" src="@Url.Content(word.HasImage ? word.Image : "~/placeholder.png")" style="width:120px; height: 120px; object-fit:cover;" alt="categor-image">
+                                <img id="imgModalFileUpload" src="@Url.Content(word.HasImage ? (GlobalStates.ApiBaseUrl + word.Image) : "~/placeholder.png")" style="width:120px; height: 120px; object-fit:cover;" alt="categor-image">
                             </td>
                             <td class="text-center" style="vertical-align:middle;">
                                 <a asp-controller="Word" asp-action="Update" asp-route-wordId="@word.Id" class="btn btn-warning shadow-sm" title="Update Word Info"><i class="fa-solid fa-pen-to-square"></i></a>

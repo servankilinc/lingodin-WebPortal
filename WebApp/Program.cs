@@ -12,6 +12,7 @@ using WebApp.Models.Dtos.CategoryDtos;
 using WebApp.Models.Dtos.UserDtos;
 using WebApp.Models.Dtos.WordDtos;
 using WebApp.Profiles;
+using WebApp.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,8 @@ builder.Services.AddHttpContextAccessor();
 
 
 // -----------****----------- Restsharp Implementation -----------****-----------
-var restClientOptions = new RestClientOptions(builder.Configuration.GetSection("ApiBaseUrl").Value!);
+GlobalStates.ApiBaseUrl = builder.Configuration.GetSection("ApiBaseUrl").Value! ;
+var restClientOptions = new RestClientOptions(GlobalStates.ApiBaseUrl);
 builder.Services.AddSingleton<RestClientOptions>(restClientOptions); // options di for login eg. methods need just base url
 builder.Services.AddScoped<RestClient>(provider =>
 {
